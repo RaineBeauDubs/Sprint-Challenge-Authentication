@@ -1,9 +1,9 @@
 const axios = require('axios');
 const bcrypt = require('bcryptjs')
 
-const { authenticate } = require('../auth/authenticate');
+const { authenticate, generateToken } = require('../auth/authenticate');
 const Users = require('../database/users-model');
-const secrets = require('../secret/secrets');
+// const secrets = require('../secret/secrets');
 
 module.exports = server => {
   server.post('/api/register', register);
@@ -61,17 +61,6 @@ function login(req, res) {
         .json(error);
     });
 };
-
-function generateToken(user) {
-  const payload = {
-    subject: user.id,
-    username: user.username
-  };
-  const options = {
-    expiresIn: '1d'
-  }
-  return jwt.sign(payload, secrets.jwtSecret, options)
-}
 
 function getJokes(req, res) {
   const requestOptions = {
